@@ -24,6 +24,7 @@ services:
         - external
       volumes:
         - drupal-data:/opt/drupal
+        - ./drupal_context/custom-php-settings.ini:/usr/local/etc/php/conf.d/99-custom-settings.ini
 
   webserver:
       image: nginx:1.23-alpine
