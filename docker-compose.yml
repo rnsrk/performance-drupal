@@ -1,0 +1,83 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:alpine
+    container_name: dlza_postgresql
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - internal
+
+  drupal:
+      image: rnsrk/drupal:9.4.7-fpm-alpine-extended
+      build: 
+        context: ./drupal_context
+      container_name: dlza_drupal
+      depends_on:
+        - postgres
+      restart: unless-stopped
+      networks:
+        - internal
+        - external
+      volumes:
+        - drupal-data:/opt/drupal
+
+  webserver:
+      image: nginx:1.23-alpine
+      container_name: dlza_webserver
+      depends_on:
+        - drupal
+      restart: unless-stopped
+      ports:
+        - 3001:80
+      volumes:
+        - drupal-data:/opt/drupal
+        - ./nginx-conf:/etc/nginx/conf.d
+      networks:
+        - external
+  solr:
+      image: solr:9
+      container_name: dlza_solr
+      restart: always
+      volumes:
+        - solr-data:/opt/solr
+      environment:
+        SOLR_JAVA_MEM: "-Xms256M -Xmx512M"
+      ports:
+        - 3002:8983
+      networks:
+        - external
+  graphdb:
+    image: rnsrk/graphdb:10.0.2
+    container_name: dlza_graphdb
+    build: 
+      context: ./graphdb_context
+    volumes:
+      - graphdb-data:/opt/graphdb
+    ports:
+      - 3003:7200
+    networks:
+      - external
+
+  adminer:
+    image: adminer:fastcgi
+    container_name: dlza_adminer
+    restart: always
+    networks:
+      - internal
+      - external
+
+networks:
+  external:
+    driver: bridge
+  internal:
+    driver: bridge
+
+volumes:
+  db-data:
+  drupal-data:
+  graphdb-data:
+  solr-data:
