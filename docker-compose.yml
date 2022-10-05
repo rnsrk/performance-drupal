@@ -39,7 +39,7 @@ services:
       networks:
         - external
   solr:
-      image: solr:9
+      image: solr:8-slim
       container_name: dlza_solr
       restart: always
       volumes:
