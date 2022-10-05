@@ -3,7 +3,7 @@ FROM drupal:9.4.7-fpm-alpine
 MAINTAINER Robert Nasarek "r.nasarek@gnm.de"
 
 # Install build environment
-RUN apk add build-base autoconf vim
+RUN apk add build-base autoconf vim git
 
 # Install extensions
 RUN pecl install apcu uploadprogress
