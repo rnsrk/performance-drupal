@@ -8,6 +8,8 @@ services:
     env_file: .env
     volumes:
       - db-data:/var/lib/postgresql/data
+    ports:
+      - 3000:5432
     networks:
       - internal
 
@@ -57,7 +59,7 @@ services:
     build: 
       context: ./graphdb_context
     volumes:
-      - graphdb-data:/opt/graphdb
+      - graphdb-data:/graphdb/data
     ports:
       - 3003:7200
     networks:
