@@ -18,7 +18,8 @@
 * TripleStore from slim-buster
 ## Start
 * Clone Repo with `git clone git@github.com:rnsrk/performance-drupal.git`.
-* Rename .example-env to .env and set environment varibles fpr postgres service.
+* Rename .example-env to .env and set environment varibles for postgres service.
+* Run `./prepare_volumes.sh` to create drupal-data directory and add absolute path to .env variable.
 * Get [GraphDB free standalone server](https://graphdb.ontotext.com/).
 * Copy zip-file to to /graphdb_context and rename it to "graphdb.zip".
 * Start containers with `docker compose up -d`.

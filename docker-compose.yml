@@ -59,5 +59,9 @@ services:
 volumes:
   db-data:
   drupal-data:
+    driver_opts:
+           type: none
+           device: ${DRUPAL_DATA} #NOTE needs full path (~ or ./ doesn't work)
+           o: bind
   graphdb-data:
   solr-data:
