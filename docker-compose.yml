@@ -8,10 +8,6 @@ services:
     env_file: .env
     volumes:
       - db-data:/var/lib/postgresql/data
-    ports:
-      - 3000:5432
-    networks:
-      - internal
 
   drupal:
       image: rnsrk/drupal:9.4.7-fpm-alpine-extended
@@ -21,9 +17,6 @@ services:
       depends_on:
         - postgres
       restart: unless-stopped
-      networks:
-        - internal
-        - external
       volumes:
         - drupal-data:/opt/drupal
         - ./drupal_context/custom-php-settings.ini:/usr/local/etc/php/conf.d/99-custom-settings.ini
@@ -39,45 +32,29 @@ services:
       volumes:
         - drupal-data:/opt/drupal
         - ./nginx-conf:/etc/nginx/conf.d
-      networks:
-        - external
+
   solr:
       image: solr:8-slim
       container_name: dlza_solr
-      restart: always
+      restart: unless-stopped
       volumes:
         - solr-data:/opt/solr
       environment:
         SOLR_JAVA_MEM: "-Xms256M -Xmx512M"
-      ports:
-        - 3002:8983
-      networks:
-        - external
+
   graphdb:
     image: rnsrk/graphdb:10.0.2
     container_name: dlza_graphdb
+    restart: unless-stopped
     build: 
       context: ./graphdb_context
     volumes:
       - graphdb-data:/graphdb/data
-    ports:
-      - 3003:7200
-    networks:
-      - external
 
   adminer:
     image: adminer:fastcgi
     container_name: dlza_adminer
-    restart: always
-    networks:
-      - internal
-      - external
-
-networks:
-  external:
-    driver: bridge
-  internal:
-    driver: bridge
+    restart: unless-stopped
 
 volumes:
   db-data:
