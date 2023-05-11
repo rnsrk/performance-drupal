@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   postgres:
-    image: rnsrk/postgres:alpine
+    image: rnsrk/postgres:15.2-alpine
     build: 
         context: ./postgres_context
     container_name: postgres
@@ -24,7 +24,7 @@ services:
         - ./volumes/drupal/private_files:/var/www/private_files
 
   solr:
-      image: solr:8-slim
+      image: solr:8.11.2-slim
       container_name: solr
       restart: unless-stopped
       volumes:
@@ -42,12 +42,12 @@ services:
       - graphdb_data:/graphdb/data
 
   adminer:
-    image: adminer:fastcgi
+    image: adminer:4.8.1-fastcgi
     container_name: adminer
     restart: unless-stopped
 
   webserver:
-      image: nginx:1.23-alpine
+      image: nginx:1.23.4-alpine
       container_name: webserver
       depends_on:
         - drupal
