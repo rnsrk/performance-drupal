@@ -1,3 +1,5 @@
 .env
+.htpasswd
 graphdb.zip
-drupal-data
+settings.php
+volumes

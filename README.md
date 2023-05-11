@@ -18,10 +18,16 @@
 * TripleStore from slim-buster
 ## Start
 * Clone Repo with `git clone git@github.com:rnsrk/performance-drupal.git`.
-* Rename .example-env to .env and set environment varibles for postgres service.
-* Run `./prepare_volumes.sh` to create drupal-data directory and add absolute path to .env variable.
+* Rename .example-env to .env and set environment variables for postgres service.
+* Rename ./nginx_context/.example-htpasswd to .htpasswd and set environment variables for nginx service.
+* Rename ./drupal_context/.example-settings.php to settings.php and set environment variables for drupal service.
 * Get [GraphDB free standalone server](https://graphdb.ontotext.com/).
 * Copy zip-file to to /graphdb_context and rename it to "graphdb.zip".
 * Start containers with `docker compose up -d`.
-* Go to`http://localhost:3001`
+* Go to `http://drupal.local` for Drupal installation
+* Go to `http://graphdb.local` for GraphDB workbench
+* Go to `http://adminer.local` for Adminer workbench
 
+## Roadmap
+* implement iipserver correctly
+* have readable/writable mount volumes for postgres, solr, graphdb

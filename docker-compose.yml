@@ -2,40 +2,30 @@ version: "3.8"
 
 services:
   postgres:
-    image: postgres:alpine
-    container_name: dlza_postgresql
+    image: rnsrk/postgres:alpine
+    build: 
+        context: ./postgres_context
+    container_name: postgres
     restart: unless-stopped
     env_file: .env
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - ./volumes/db_data:/var/lib/postgresql/data:rw
 
   drupal:
-      image: rnsrk/drupal:9.4.7-fpm-alpine-extended
+      image: rnsrk/drupal:10.0.9-php8.2-fpm-alpine
       build: 
         context: ./drupal_context
-      container_name: dlza_drupal
+      container_name: drupal
       depends_on:
         - postgres
       restart: unless-stopped
       volumes:
-        - drupal-data:/opt/drupal
-        - ./drupal_context/custom-php-settings.ini:/usr/local/etc/php/conf.d/99-custom-settings.ini
-
-  webserver:
-      image: nginx:1.23-alpine
-      container_name: dlza_webserver
-      depends_on:
-        - drupal
-      restart: unless-stopped
-      ports:
-        - 3001:80
-      volumes:
-        - drupal-data:/opt/drupal
-        - ./nginx-conf:/etc/nginx/conf.d
+        - ./volumes/drupal/data:/opt/drupal:rw
+        - ./volumes/drupal/private_files:/var/www/private_files
 
   solr:
       image: solr:8-slim
-      container_name: dlza_solr
+      container_name: solr
       restart: unless-stopped
       volumes:
         - solr-data:/opt/solr
@@ -43,25 +33,35 @@ services:
         SOLR_JAVA_MEM: "-Xms256M -Xmx512M"
 
   graphdb:
-    image: rnsrk/graphdb:10.0.2
-    container_name: dlza_graphdb
+    image: rnsrk/graphdb
+    container_name: graphdb
     restart: unless-stopped
     build: 
       context: ./graphdb_context
     volumes:
-      - graphdb-data:/graphdb/data
+      - graphdb_data:/graphdb/data
 
   adminer:
     image: adminer:fastcgi
-    container_name: dlza_adminer
+    container_name: adminer
     restart: unless-stopped
 
+  webserver:
+      image: nginx:1.23-alpine
+      container_name: webserver
+      depends_on:
+        - drupal
+        - solr
+        - graphdb
+        - adminer
+      restart: unless-stopped
+      ports:
+        - 80:80
+      volumes:
+        - ./volumes/drupal/data:/opt/drupal
+        - ./nginx_context/server_conf:/etc/nginx/conf.d/
+        - ./nginx_context/.htpasswd:/usr/share/nginx/.htpasswd
+
 volumes:
-  db-data:
-  drupal-data:
-    driver_opts:
-           type: none
-           device: ${DRUPAL_DATA} #NOTE needs full path (~ or ./ doesn't work)
-           o: bind
-  graphdb-data:
+  graphdb_data:
   solr-data:
