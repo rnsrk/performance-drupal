@@ -21,9 +21,9 @@
 
 ### Prepare Configs
 * Clone Repo with `git clone git@github.com:rnsrk/performance-drupal.git`.
-* Rename .example-env to .env and set environment variables for postgres service.
-* Rename ./nginx_context/.example-htpasswd to .htpasswd and set environment variables for nginx service.
-* Rename ./drupal_context/.example-settings.php to settings.php and set environment variables for drupal service.
+* Rename `.example-env` to `.env` and set environment variables for postgres service.
+* Rename `./nginx_context/.example-htpasswd` to `.htpasswd` and set environment variables for nginx service.
+* Rename `./drupal_context/.example-settings.php` to `settings.php` and set environment variables for drupal service.
 
 ### Add local domains
 * Add the domains to your `/etc/hosts`:
@@ -34,7 +34,7 @@
 ```
 ### Get Triplestore
 * Get [GraphDB free standalone server](https://graphdb.ontotext.com/).
-* Copy zip-file to to /graphdb_context and rename it to "graphdb.zip".
+* Copy zip-file to to `/graphdb_context` and rename it to `graphdb.zip`.
 
 ### Start containers
 * Start containers with `docker compose up -d`.
