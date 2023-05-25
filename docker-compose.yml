@@ -33,7 +33,7 @@ services:
         SOLR_JAVA_MEM: "-Xms256M -Xmx512M"
 
   graphdb:
-    image: rnsrk/graphdb
+    image: rnsrk/graphdb:latest
     container_name: graphdb
     restart: unless-stopped
     build: 
