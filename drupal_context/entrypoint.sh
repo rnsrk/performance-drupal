@@ -63,6 +63,7 @@ if ! [ -d /opt/drupal/web ]
 		mv /settings.php web/sites/default/settings.php
 
 		# Set permissions
+		chmod -R 775 /opt/drupal
 		chmod -R 644 web/sites/default/settings.php
 		chown -R www-data:www-data /opt/drupal
 	else
